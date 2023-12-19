@@ -2,7 +2,19 @@ import Pagination from '@/app/ui/invoices/pagination'
 import Search from '@/app/ui/search'
 import { CreateInvoice } from '@/app/ui/invoices/buttons'
 import { roboto_mono } from '@/app/ui/font'
-export default function Page() {
+import { Suspense } from 'react'
+import { InvoicesTableSkeleton } from '@/app/ui/skeletons'
+import Table from '@/app/ui/invoices/table'
+import { fetchInvoicesPages } from '@/app/lib/data'
+export default async function Page({ searchParams,}: {
+    searchParams?: {
+        query?: string;
+        page?: string;
+    }
+}) {
+    const query = searchParams?.query || ''
+    const currentPage = Number(searchParams?.page) || 1
+    const totalPages = await fetchInvoicesPages(query)
     return (
        <div className="w-full">
         <div className="flex w-full items-center justify-between">
@@ -12,7 +24,10 @@ export default function Page() {
             <Search placeholder="Search Invoices....." />
             <CreateInvoice />
         </div>
-        
+        <Suspense key={query * currentPage} fallback={<InvoicesTableSkeleton />}>
+            <Table query={query} currentPage={currentPage}/>
+        </Suspense>
+        <Pagination totalPages={totalPages} />
        </div>
     )
 }
