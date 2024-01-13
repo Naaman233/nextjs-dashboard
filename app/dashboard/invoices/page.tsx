@@ -24,7 +24,7 @@ export default async function Page({ searchParams,}: {
             <Search placeholder="Search Invoices....." />
             <CreateInvoice />
         </div>
-        <Suspense key={query * currentPage} fallback={<InvoicesTableSkeleton />}>
+        <Suspense key={parseInt(query) * currentPage} fallback={<InvoicesTableSkeleton />}>
             <Table query={query} currentPage={currentPage}/>
         </Suspense>
         <Pagination totalPages={totalPages} />
