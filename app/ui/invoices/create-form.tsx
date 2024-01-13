@@ -1,3 +1,4 @@
+'use client'
 import { CustomerField, InvoiceForm } from '@/app/lib/definitions';
 import Link from 'next/link';
 import {
